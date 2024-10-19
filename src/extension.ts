@@ -29,15 +29,18 @@ export function activate(context: vscode.ExtensionContext) {
 			response.markdown('```java\n' + code[1] + '\n```');
 			
 			response.button({
-				title: 'Copy to clipboard',
-				command: 'vscode-spring-chat.showInformationMessage',
+				title: 'Show code in editor',
+				command: 'vscode-spring-chat.showCodeInEditor',
 				arguments: [code[1]]
 			});
 		}
-		vscode.commands.registerCommand('vscode-spring-chat.showInformationMessage', (code: string) => {
-			vscode.window.showInformationMessage(code, {
-				modal: true,
+		vscode.commands.registerCommand('vscode-spring-chat.showCodeInEditor', async (code: string) => {
+			 // Open the document
+			 const templatePreviewDocument: vscode.TextDocument = await vscode.workspace.openTextDocument({
+				language: 'java',
+				content: `${code}`
 			});
+			const tdependencyUpdatesTextEditor = await vscode.window.showTextDocument(templatePreviewDocument, vscode.ViewColumn.Active);
 		});
 	});
 }
